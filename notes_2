@@ -8,3 +8,5 @@ select * from product where exists (select * from ordering where qty in ('2') an
 
 select * from product where exists 
 
+select * from product
+
