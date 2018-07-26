@@ -1,0 +1,10 @@
+select count(*) from customer;
+
+select avg(total_amt) from ordering;
+
+select * from ordering where exists(select * from product where type in ('inspiration','c') and ordering.prod_id=prod_id);
+
+select * from product where exists (select * from ordering where qty in ('2') and product.prod_id=prod_id );
+
+select * from product where exists 
+

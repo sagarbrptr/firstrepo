@@ -1,0 +1,101 @@
+create table customer(
+cust_id	int,
+cust_name varchar(255),
+city varchar(255),
+street varchar(255),
+order_id int
+);
+
+create table product(
+prod_id int,
+prod_name varchar(255),
+type varchar(255),
+price int,
+discount int
+);
+
+create table ordering(
+prod_id int,
+order_id int,
+cust_id int,
+qty int,
+total_amt int,
+order_date date
+);
+
+alter table customer
+add primary key (cust_id);
+ 	
+alter table product 
+add primary key (prod_id);
+
+alter table ordering
+add foreign key (cust_id) references customer(cust_id);   
+
+alter table ordering
+add foreign key (prod_id) references product(prod_id);   
+
+insert into customer values(1,'ramesh','pune','katraj','123');
+insert into customer values(2,'suresh','pune','katraj','124');
+insert into customer values(3,'umesh','mumbai','dharavi','125');
+insert into customer values(4,'bhavesh','nagpur','omkar','126');
+insert into customer values(5,'suresh','pune','katraj','127');
+insert into customer values(6,'ravi','mumbai','dharavi','128');
+insert into customer values(7,'ravi','mumbai','dharavi','129');
+
+insert into product values(1,'let us c','c',980,0);
+insert into product values(2,'let us c','c',980,0);
+insert into product values(3,'horowitz','algorithms',700,0);
+insert into product values(4,'wings of fire','inspiration',100,0);
+insert into product values(5,'famous five','novel',160,0);
+insert into product values(6,'kuch toh log kahenge','biography',80,0);
+insert into product values(7,'contemplating life','inspiration',180,0);
+
+insert into ordering values(1,123,1,2,980,'2018-07-11');
+insert into ordering values(2,124,2,1,980,'2018-07-13');
+insert into ordering values(3,125,3,1,700,'2018-08-13');
+insert into ordering values(4,126,4,1,100,'2018-07-13');
+insert into ordering values(5,127,5,1,160,'2017-08-13');
+insert into ordering values(6,128,6,1,80,'2018-07-06');
+insert into ordering values(7,129,7,1,180,'2018-07-13');
+
+alter table customer drop order_id;
+
+insert into ordering values(1,222,1,1,980,'2017-01-13');
+
+1)
+select customer.cust_name, product.prod_name, ordering.qty, ordering.total_amt 
+from ((ordering 
+inner join customer on ordering.cust_id=1 and customer.cust_id=1)
+inner join product on product.prod_id=ordering.prod_id);
+
+2)
+select customer.cust_name, product.prod_name, ordering.qty, ordering.total_amt
+from ((ordering
+inner join product on ordering.order_id=123 and product.prod_id=ordering.prod_id)
+inner join customer on ordering.cust_id=customer.cust_id);
+
+insert into ordering values(2,123,1,1,980,'2017-05-10');
+
+3)
+select sum(totat_amt) from ordering;
+
+4)
+select order_id, sum(total_amt) as total from ordering
+group by order_id
+order by total desc;
+
+5)
+select cust_name from customer
+where cust_name like "Rav%";
+
+
+7)
+select * from customer where city='pune' 
+and 
+cust_id exists in ( select cust_id from ordering where order_date='2018-07-13');
+
+update ordering
+set total_amt=total_amt*qty;
+
+9)delete from ordering where order_id=126;
